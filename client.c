@@ -10,10 +10,8 @@
 const int PORT = 9999;
 const int MAX_BUFFER = 300;
 
-void error(const char *msg) {
-  perror(msg);
-  exit(0);
-}
+void processCommand(char[MAX_BUFFER], int, char*[]);
+void error(const char *);
 
 //  ./client 127.0.0.1 command
 int main(int argc, char *argv[]) {
@@ -49,13 +47,17 @@ int main(int argc, char *argv[]) {
         else {
           printf("Established connection. \n");
 
-          bzero(buffer, MAX_BUFFER);
-          strcpy(buffer, argv[2]);
+          char order[MAX_BUFFER];
+          processCommand(order, argc, argv);
+          printf("%s \n", order);
+
+        /*  bzero(buffer, MAX_BUFFER);
+          strcpy(buffer, order);
           write(comms_chanel, buffer, strlen(buffer));
 
           bzero(buffer, MAX_BUFFER);
           read(comms_chanel, buffer, MAX_BUFFER-1);
-          printf("%s \n", buffer);
+          printf("%s \n", buffer);*/
 
         }
       }
@@ -64,4 +66,20 @@ int main(int argc, char *argv[]) {
   }
 
   return 0;
+}
+
+void error(const char *msg) {
+  perror(msg);
+  exit(0);
+}
+
+void processCommand(char order[MAX_BUFFER], int argc, char *argv[]) {
+
+  for(unsigned i=2; i<argc; i++) {
+    strcat(order, argv[i]);
+    if(i != argc-1) {
+      strcat(order, " ");
+    }
+  }
+
 }

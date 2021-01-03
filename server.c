@@ -7,9 +7,9 @@
 #include <sys/wait.h>
 #include <string.h>
 
-const int PORT          = 9999;
+const int PORT = 9999;
 const int TOTAL_REQUEST = 3;
-const int MAX_BUFFER    = 300;
+const int MAX_BUFFER = 300;
 
 void error(const char *msg) {
   perror(msg);
