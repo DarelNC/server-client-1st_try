@@ -57,7 +57,7 @@ int main() {
           error("Error on accept. \n");
         }
         else {
-          printf("Accepted");
+          printf("Accepted \n");
 
           int tuberia[2];
           if(pipe(tuberia) == -1) {
@@ -66,31 +66,45 @@ int main() {
 
           int pid = fork();
           if(pid == 0) {
-            int std_in = dup(0);
+            int std_in  = dup(0);
             int std_out = dup(1);
+            int std_err = dup(2);
 
             close(0); //Read
             close(1); //Write
+            close(2); //Error
             dup(tuberia[0]);
             dup(tuberia[1]);
+            dup(tuberia[2]);
 
+            /*Read from client*/
             bzero(buffer, MAX_BUFFER);
             read(network_socket, buffer, MAX_BUFFER-1);
             system(buffer);
 
+            printf("\n");
+            printf("%d \n", (int)strlen(buffer));
+            printf("%d \n", (int)sizeof(buffer));
+            printf("%d - %d - %d \n", (int)sizeof(tuberia[0]), (int)sizeof(tuberia[1]), (int)sizeof(tuberia[2]);
+
+
+            /*Send to client*/
             bzero(buffer, MAX_BUFFER);
             read(tuberia[0], buffer, MAX_BUFFER-1);
             write(network_socket, buffer, strlen(buffer));
 
             close(tuberia[0]);
             close(tuberia[1]);
-
+            close(tuberia[2]);
             close(0);
             close(1);
+            close(2);
             dup(std_in);
             dup(std_out);
+            dup(std_err);
             close(std_in);
             close(std_out);
+            close(std_err);
 
             close(network_socket);
           }
