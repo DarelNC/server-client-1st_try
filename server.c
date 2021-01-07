@@ -33,8 +33,8 @@ int main() {
 
     /*Assign values to --server_address--*/
     server_address.sin_family      = AF_INET;
-    server_address.sin_addr.s_addr = INADDR_ANY;
     server_address.sin_port        = htons(PORT);
+    server_address.sin_addr.s_addr = INADDR_ANY;
 
     /*Binding*/
     if(bind(comms_chanel, (struct sockaddr *) &server_address, 
